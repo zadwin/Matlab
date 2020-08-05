@@ -21,7 +21,7 @@ maxnfev = 20000;
 his_run = zeros(maxnfev,1); % 存储每次运行的最好函数值历史
 
 %% ------------------初始化-----------------------
-x = zeros(D,np); % 记录粒子的初始位置
+x = 1./zeros(D,np); % 记录粒子的初始位置
 for i=1:np
     for j=1:D
         x(j,i) = LB(j) + rand()*(UB(j)-LB(j)); % 第i个粒子位置初值
@@ -39,7 +39,7 @@ for i=1:np
     fbest_p(i) = fun(x(:,i)'); % 计算每个粒子的初始适应值，并记录在fbest_p中,注意nfev已加1
     if nfev == 1
         his_run(nfev,1) = fbest_p(1);
-    elseif fbest_p(i)<his_run(nfev-1,1)
+    elseif fbest_p(i) < his_run(nfev-1,1)
         his_run(nfev,1) = fbest_p(i);
     else
         his_run(nfev,1) = his_run(nfev-1,1);

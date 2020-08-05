@@ -54,7 +54,7 @@ for i = 1:N
     fx(i,1) = fun(x0);
 end
 plot3(xm(:,1) ,xm(:,2), fx(:,1), 'ro');  % 注意plot和plot3的区别。
-saveas(gcf,'初始状态.jpg'); % 此函数用于保存绘制出来的图片，其中图像句柄figure_handle固定为gcf。并且会对原来同名的图像进行覆盖。
+% saveas(gcf,'初始状态.jpg'); % 此函数用于保存绘制出来的图片，其中图像句柄figure_handle固定为gcf。并且会对原来同名的图像进行覆盖。
 hold on;
 
 % 图二的开始
@@ -89,6 +89,7 @@ while iter <= ger
     end
     % 这里第一次的速度是随机生成的。repmat（1:10,40,1）就是对一行数1，2，....，10值重复排列成40*1的矩阵.
     % 此处的repmat(ym, N, 1)是对ym一个1行2列的矩阵进行排列，把一行当成一个元素。
+    % 运行的过程中一定会朝着目前最优的地方更新。
     v = v * c_1 + c_2 * rand *(xm - x) + c_3 * rand *(repmat(ym, N, 1) - x);% 速度更新
     % 边界速度处理，防止速度越界。
     for i=1:d 
@@ -116,32 +117,28 @@ while iter <= ger
     record(iter) = fym;% 最小值记录，指的是最小的函数值（最小适应值）
     % 10秒中之后重新绘制一下算法值的状态变化。
     if times >= 10
-        % 每迭代10次在图像中输出一下个体的位置。
-        % 想要实现状态图，只能每次清楚后两个图像都画。
-        cla;    % cla命令会清楚所有的图像中设定的内容（恢复自动设定）。
-        mesh(x0_1, x0_2, y0);
-        hold on;
-        for i=1: N
-            for j = 1:d
-                x0(1,j) = x(i,j);
-            end
-            % x0 = [x(i,1) x(i,2) x(i,3) x(i,4)];
-            fx(i, 1) = fun(x0);  % 其中x为一个点的集合
-        end
-        plot3(x(:,1), x(:, 2), fx(:,1), 'ro');
-        hold on;
-        if iter == 10
-            saveas(gcf,'粒子工作中间状态(第10代).jpg');
-        end
-        pause(0.2);
-        times=0;
-    end
-    iter = iter+1;
-    times=times+1;
+       % 每迭代10次在图像中输出一下个体的位置。
+       % 想要实现状态图，只能每次清楚后两个图像都画。
+       cla;    % cla命令会清楚所有的图像中设定的内容（恢复自动设定）。
+       mesh(x0_1, x0_2, y0);
+       hold on;
+       for i=1: N
+           for j = 1:d
+               x0(1,j) = x(i,j);
+           end
+           % x0 = [x(i,1) x(i,2) x(i,3) x(i,4)];
+           fx(i, 1) = fun(x0);  % 其中x为一个点的集合
+       end
+       plot3(x(:,1), x(:, 2), fx(:,1), 'ro');
+       hold on;
+       pause(0.2);
+       times=0;
+   end
+   iter = iter + 1;
+   times = times + 1;
 end
 % 图三的开始，它记录的是最大值的过程。此处的plot相当于是按照数组下标进行绘制。
 figure(3);plot(record);title('收敛过程');
-saveas(gcf,'收敛过程.jpg');
 hold on;
 
 figure(4);
@@ -150,7 +147,6 @@ hold on;
 % 为什么最后所有的x变量都能到达最佳为位置（部分函数）
 plot3(x(:,1), x(:,2), fx(:,1), 'ro');
 title("最终状态");
-saveas(gcf,'最终状态.jpg');
 hold on;
 
 % 输出最小值和最小值点。

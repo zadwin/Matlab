@@ -50,7 +50,7 @@ switch index
     case 15
         PSO_Fun_Plot(@rosen, 50, 2, -10, 10, -1.5, 1.5);
     case 16
-        PSO_Fun_Plot(@schw, 50, 2, -500, 500, -1.5, 1.5);
+        PSO_Fun_Plot(@schw, 100, 2, -500, 500, -20, 20);
     case 17
         PSO_Fun_Plot(@shub, 50, 2, -10, 10, -1.5, 1.5);
     case 18
